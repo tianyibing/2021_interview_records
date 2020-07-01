@@ -1,0 +1,68 @@
+1、基本信息
+1）公司名称：字节跳动
+2）面试岗位：后端开发工程师_视频架构
+3）面试时间：21/6/30 16:00~17:00
+4）面试结果：被拒
+
+2、面试内容详细记录：
+1）自我介绍
+2）项目介绍：询问了硕士期间参入的科研项目的基本情况、技术手段、实现效果
+3）操作系统中进程的线程的区别？
+4）进程调度开销大的原因？进程调度时上下文切换完成的主要工作？上下文包括那些信息？
+5）死锁的含义？如何避免进程死锁？
+6）操作系统中锁机制是如何实现的？
+7）多核处理器间如何应用锁？
+8）假设现在网络很拥堵，可能的原因是什么？
+9）TCP的拥塞控制有什么用？是如何实现的？
+10）解释一下DNS协议的含义、作用？
+11）了解DNS劫持吗？
+
+3、手撕代码：
+1）题目：给一串整数数字，和一个目标和，在整数数字的中间位置添加+或-，使得分割后的数字相加等于目标和，求有多少种方式达到目的。
+        例如给定数字12345，目标和3，可以把原数字分割为1-2+3-4+5=3，为一种满足条件的分割方式。
+  
+2）解题方法：经典的回溯算法/未进行剪枝优化
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+void backtrack(string data, int start, int width, int cur_sum, int sum, int& result);
+int main() {
+	//int a;
+	//cin >> a;
+	int data = 21;
+	string data_str = to_string(data);
+	int width = data_str.size();
+	int sum = 3;
+	int cur_sum = 0;
+	int result = 0;
+	backtrack(data_str, 0, width, cur_sum, sum, result);
+	cout << result;
+	return 0;
+}
+
+void backtrack(string data, int start, int width, int cur_sum, int sum, int& result) {
+	if (start == width && cur_sum == sum) {
+		result++;
+		return;
+	}
+	for (int i = start + 1; i <= width; i++) {
+		int temp_data = stoi(data.substr(start, i - start));
+		if (start == 0) {
+			backtrack(data, i, width, cur_sum + temp_data, sum, result);
+		}
+		else {
+			backtrack(data, i, width, cur_sum + temp_data, sum, result);
+			backtrack(data, i, width, cur_sum - temp_data, sum, result);
+		}
+	}
+	return;
+}
+
+4、经验总结：
+  面试的时候需要沉着冷静，遇到不太熟悉的问题也可以尝试去回答，把问题向自己了解的方向去引导，当你在回答某个问题是提到另外一个技术，
+那么面试官下一个问题可能就会问你刚刚提到的技术，因此回答问题尽量不要自己挖坑，另外本次还犯了一个大问题，自己没有对代码题仔细分析，
+其实结题方法是正确的，线上也返回了正确的结果，但是自己看错了考官给的案例，12345和为3的方法1种，我还以为是3种，当时判题系统返回1
+，我还以为自己做错了，这个方面给考官误导了，考官可能也认为我的代码没有返回正确的结果。
+  加油！奥里给！下次一定注意改正本次的毛病！
